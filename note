@@ -1,0 +1,4 @@
+1. send data to the db C Post 
+2. read data from the db R get
+3. switch task U patch
+4. delete the data D delete

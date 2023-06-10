@@ -1,0 +1,63 @@
+### test call
+
+GET http://localhost:8000
+
+ ### test call
+
+POST http://localhost:8000
+
+DELETE http://localhost:8000
+
+
+# Task router below
+
+### read tasks api
+
+GET http://localhost:8000/api/v1/task
+
+
+# {
+#     "task": "TV",
+#     "hr": 323,
+#     "_id": "ssdsd",
+#     "type": "entry"
+
+# },
+# {
+#     "task": "TV",
+#     "hr": 333,
+#     "_id": "ssdsd",
+#     "type": "entry"
+
+# }
+
+###
+POST http://localhost:8000/api/v1/task
+Content-Type:  application/json
+
+{
+    "task": " gg TV",
+    "hr": 33,
+    "_id": "ssfdds",
+    "type": "entry"
+}
+
+
+
+###
+PATCH  http://localhost:8000/api/v1/task
+Content-Type: application/json
+{
+     "_id": "ssdsd",
+    "type": "bad"
+}
+
+
+
+
+###
+DELETE  http://localhost:8000/api/v1/task
+Content-Type: application/json
+{
+     "_id": "ssdsd"
+}
