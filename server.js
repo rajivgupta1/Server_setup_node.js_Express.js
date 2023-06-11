@@ -1,13 +1,18 @@
 import express from "express";
 
 const app =express();
+import cors from "cors";
 
-const PORT = 8000
+const PORT = 8000;
+
+//connect mongodb
+import { mongoConnect } from "./src/config/mongoDb.js";
+mongoConnect();
 
 
 // middleawares 
-
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 
 //API endpoints
 import taskRouter from "./src/router/taskRouter.js";
