@@ -1,107 +1,93 @@
 import express from "express";
-import { createTask, deleteTaskById, readTasks, switchTask } from "../model/TaskModel.js";
-
+import {
+  createTask,
+  deleteTaskById,
+  readTasks,
+  switchTask,
+  deleteManyTasks,
+} from "../model/TaskModel.js";
 const router = express.Router();
 
-// router.all("/", (req, res) =>{
-//     //this router task all methods
-//     console.log("first");
-// });
+router.get("/", async (req, res) => {
+  //get data from the db
+  const taskList = await readTasks();
 
-
-router.get("/", async (req, res) =>{
-    //this router task all methods
-    // console.log("first");
-
-    const taskList = await readTasks();
-
-    res.json({
-        status: 'success',
-        message: ' from get method',
-        taskList,
-    });
+  res.json({
+    status: "success",
+    message: "From Get method",
+    taskList,
+  });
 });
 
-router.post("/", async (req, res) =>{
-    //this router task all methods
-  try{
+router.post("/", async (req, res) => {
+  try {
     const result = await createTask(req.body);
-    result?._id 
-    ?res.json({
-        status: "success",
-        message: "New task has been added successfully",
-      })
-    : res.json({
-        status: "success",
-        message: "unable to add the data",
-      });
-} catch (error) {
-  console.log(error);
-}
+
+    result?._id
+      ? res.json({
+          status: "success",
+          message: "New task has been added successfully",
+        })
+      : res.json({
+          status: "error",
+          message: "unable to add the data",
+        });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error.messasge,
+    });
+    console.log(error);
+  }
 });
 
 router.patch("/", async (req, res) => {
-    //this router task all methods
-    try{
-    // console.log("req.body");
-    const { _id, type} = req.body
-
-    //update data in array
-    // loop through the array and find matching _id and update the type
-
-
-    const result = await switchTaskc(_id, type);
-
+  try {
+    const { _id, type } = req.body;
+    console.log(req.body);
+    // update data in db
+    const result = await switchTask(_id, type);
+console.log(result);
     result?._id
-    ? res.json({
-        status: "success",
-        message: "The task has been switched successfully",
-    })
-    : res.json({
-        status: "error",
-        message: "The task did not switched",
+      ? res.json({
+          status: "success",
+          message: "The task has been switeched successfully",
+        })
+      : res.json({
+          status: "error",
+          message: "The task did not switeched ",
         });
-        } catch (error) {
-            console.log(error);
+  } catch (error) {
+    console.log(error);
 
     res.json({
-        status: 'error',
-        message: ' the task did not switched',
-    });
- }
-});
-
-router.delete("/:_id?", async (req, res) =>{
-    try{
-const {_id} = req.params;
-const result = await deleteTaskById(_id);
-
-console.log(result);
-result?._id
-    ?res.json({
-        status: 'sucess',
-        message: 'The task has been deleted successfully'
-    })
-    :res.json({
-        status: 'error',
-        message: 'The task did not deleted'
-        });
-
-    } catch (error) {
-        console.log(error);
-
-        res.json({
       status: "error",
-      message: "error deleting the task",
-        });
-    }
-
+      message: "Error, The task did not switeched ",
+    });
+  }
 });
 
-// router.delete("/", (req, res) =>{
-//     //this router task all methods
-//     console.log("sdgsdfsdf");
-// });
+router.delete("/", async (req, res) => {
+  try {
+    const result = await deleteManyTasks(req.body);
 
+    result?.deletedCount > 0
+      ? res.json({
+          status: "success",
+          message: "The tasks have been deleted successfully",
+        })
+      : res.json({
+          status: "error",
+          message: "Unable to delete the task ",
+        });
+  } catch (error) {
+    console.log(error);
+
+    res.json({
+      status: "error",
+      message: "Error deleting the task",
+    });
+  }
+});
 
 export default router;
